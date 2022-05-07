@@ -85,7 +85,7 @@ class Locations @Inject constructor(
     val resultClick = Location(320, 1350).xFromCenter()
     val resultQuestRewardRegion = Region(350, 140, 370, 250).xFromCenter()
     val resultDropScrollbarRegion = Region(980, 230, 100, 88).xFromCenter()
-    val resultDropScrollEndClick = Location(1026, 1032).xFromCenter()
+    val resultDropScrollEndClick = Location(1030, 968).xFromCenter()
     val resultMasterExpRegion = Region(0, 350, 400, 110).xFromCenter()
     val resultMasterLvlUpRegion = Region(710, 160, 250, 270).xFromCenter()
     val resultScreenRegion = Region(-1180, 300, 700, 200).xFromCenter()
