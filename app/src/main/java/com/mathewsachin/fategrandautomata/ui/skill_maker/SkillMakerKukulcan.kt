@@ -52,25 +52,6 @@ fun SkillMakerKukulcan(
     }
 }
 
-@Composable
-fun TargetButton(
-    onClick: () -> Unit,
-    color: Color,
-    text: String
-) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = color),
-        modifier = Modifier.size(120.dp)
-    ) {
-        Text(
-            text,
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
 @Preview(widthDp = 600, heightDp = 300)
 @Composable
 fun TestKukulcan() {
