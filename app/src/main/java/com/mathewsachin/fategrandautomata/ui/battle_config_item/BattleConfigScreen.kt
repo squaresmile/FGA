@@ -5,20 +5,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mathewsachin.fategrandautomata.R
 import com.mathewsachin.fategrandautomata.prefs.core.BattleConfigCore
-import com.mathewsachin.fategrandautomata.scripts.enums.CardAffinityEnum
 import com.mathewsachin.fategrandautomata.scripts.models.CardPriorityPerWave
 import com.mathewsachin.fategrandautomata.scripts.models.CardScore
 import com.mathewsachin.fategrandautomata.ui.*
@@ -44,7 +45,7 @@ fun BattleConfigScreen(
 ) {
     val context = LocalContext.current
 
-    val battleConfigExport = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument()) { uri ->
+    val battleConfigExport = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         vm.export(context, uri)
     }
 
@@ -75,12 +76,12 @@ fun BattleConfigScreen(
 }
 
 sealed class BattleConfigDestination {
-    object SkillMaker: BattleConfigDestination()
-    object CardPriority: BattleConfigDestination()
-    object Spam: BattleConfigDestination()
-    object PreferredSupport: BattleConfigDestination()
-    object Back: BattleConfigDestination()
-    class Other(val id: String): BattleConfigDestination()
+    object SkillMaker : BattleConfigDestination()
+    object CardPriority : BattleConfigDestination()
+    object Spam : BattleConfigDestination()
+    object PreferredSupport : BattleConfigDestination()
+    object Back : BattleConfigDestination()
+    class Other(val id: String) : BattleConfigDestination()
 }
 
 @Composable
@@ -97,173 +98,168 @@ private fun BattleConfigContent(
         modifier = Modifier
             .fillMaxSize()
     ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                val deleteConfirmDialog = FgaDialog()
-                deleteConfirmDialog.build {
-                    title(stringResource(R.string.battle_config_item_delete_confirm_title))
-                    message(stringResource(R.string.battle_config_item_delete_confirm_message))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            val deleteConfirmDialog = FgaDialog()
+            deleteConfirmDialog.build {
+                title(stringResource(R.string.battle_config_item_delete_confirm_title))
+                message(stringResource(R.string.battle_config_item_delete_confirm_message))
 
-                    buttons(
-                        onSubmit = onDelete,
-                        okLabel = stringResource(R.string.battle_config_item_delete_confirm_ok)
+                buttons(
+                    onSubmit = onDelete,
+                    okLabel = stringResource(R.string.battle_config_item_delete_confirm_ok)
+                )
+            }
+
+            Heading(
+                stringResource(R.string.battle_config_edit)
+            ) {
+                item {
+                    HeadingButton(
+                        text = stringResource(R.string.battle_config_item_export),
+                        onClick = onExport
                     )
                 }
 
-                Heading(
-                    stringResource(R.string.p_nav_battle_config_edit)
-                ) {
-                    item {
-                        HeadingButton(
-                            text = stringResource(R.string.battle_config_item_export),
-                            onClick = onExport
-                        )
-                    }
-
-                    item {
-                        HeadingButton(
-                            text = stringResource(R.string.battle_config_item_copy),
-                            icon = icon(Icons.Default.ContentCopy),
-                            onClick = onCopy
-                        )
-                    }
-
-                    item {
-                        HeadingButton(
-                            text = stringResource(R.string.battle_config_item_delete),
-                            isDanger = true,
-                            icon = icon(Icons.Default.Delete),
-                            onClick = { deleteConfirmDialog.show() }
-                        )
-                    }
+                item {
+                    HeadingButton(
+                        text = stringResource(R.string.battle_config_item_copy),
+                        icon = icon(Icons.Default.ContentCopy),
+                        onClick = onCopy
+                    )
                 }
 
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .padding(16.dp)
-                        ) {
-                            Column {
-                                config.name.EditTextPreference(
-                                    title = stringResource(R.string.p_battle_config_name),
-                                    validate = { it.isNotBlank() },
-                                    singleLine = true
-                                )
+                item {
+                    HeadingButton(
+                        text = stringResource(R.string.battle_config_item_delete),
+                        isDanger = true,
+                        icon = icon(Icons.Default.Delete),
+                        onClick = { deleteConfirmDialog.show() }
+                    )
+                }
+            }
 
-                                Divider()
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Column {
+                            config.name.EditTextPreference(
+                                title = stringResource(R.string.p_battle_config_name),
+                                validate = { it.isNotBlank() },
+                                singleLine = true
+                            )
 
-                                config.notes.EditTextPreference(
-                                    title = stringResource(R.string.p_battle_config_notes)
-                                )
-                            }
-                        }
-                    }
+                            Divider()
 
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 16.dp)
-                        ) {
-                            SkillCommandGroup(
-                                config = config,
-                                vm = vm,
-                                openSkillMaker = { navigate(BattleConfigDestination.SkillMaker) }
+                            config.notes.EditTextPreference(
+                                title = stringResource(R.string.p_battle_config_notes)
                             )
                         }
                     }
+                }
 
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 16.dp)
-                        ) {
-                            Column {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
+                item {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 16.dp)
+                    ) {
+                        SkillCommandGroup(
+                            config = config,
+                            vm = vm,
+                            openSkillMaker = { navigate(BattleConfigDestination.SkillMaker) }
+                        )
+                    }
+                }
+
+                item {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 16.dp)
+                    ) {
+                        Column {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .height(IntrinsicSize.Min)
+                            ) {
+                                Box(
                                     modifier = Modifier
-                                        .height(IntrinsicSize.Min)
+                                        .weight(1f)
                                 ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                    ) {
-                                        config.materials.Materials()
-                                    }
-
-                                    VerticalDivider()
-
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .clickable(onClick = { navigate(BattleConfigDestination.Spam) }),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            stringResource(R.string.p_spam_spam).uppercase(),
-                                            style = MaterialTheme.typography.caption,
-                                            modifier = Modifier
-                                                .padding(16.dp, 5.dp)
-                                        )
-                                    }
-
-                                    VerticalDivider()
-
-                                    ServerSelection(config)
-
-                                    VerticalDivider()
-
-                                    PartySelection(config)
+                                    config.materials.Materials()
                                 }
 
-                                Divider()
+                                VerticalDivider()
 
-                                val cardPriority by vm.cardPriority.collectAsState(null)
-
-                                cardPriority?.let {
-                                    Preference(
-                                        title = { Text(stringResource(R.string.p_battle_config_card_priority)) },
-                                        summary = { CardPrioritySummary(it) },
-                                        onClick = { navigate(BattleConfigDestination.CardPriority) }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .clickable(onClick = { navigate(BattleConfigDestination.Spam) }),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        stringResource(R.string.p_spam_spam).uppercase(),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier
+                                            .padding(16.dp, 5.dp)
                                     )
                                 }
+
+                                VerticalDivider()
+
+                                ServerSelection(config)
+
+                                VerticalDivider()
+
+                                PartySelection(config)
+                            }
+
+                            Divider()
+
+                            val cardPriority by vm.cardPriority.collectAsState(null)
+
+                            cardPriority?.let {
+                                Preference(
+                                    title = { Text(stringResource(R.string.p_battle_config_card_priority)) },
+                                    summary = { CardPrioritySummary(it) },
+                                    onClick = { navigate(BattleConfigDestination.CardPriority) }
+                                )
                             }
                         }
                     }
+                }
 
-                    item {
-                        val maxSkillText by vm.maxSkillText.collectAsState("")
+                item {
+                    val maxSkillText by vm.maxSkillText.collectAsState("")
 
-                        SupportGroup(
-                            config = config,
-                            goToPreferred = { navigate(BattleConfigDestination.PreferredSupport) },
-                            maxSkillText = maxSkillText,
-                            friendEntries = friendEntries
-                        )
-                    }
+                    SupportGroup(
+                        config = config,
+                        goToPreferred = { navigate(BattleConfigDestination.PreferredSupport) },
+                        maxSkillText = maxSkillText,
+                        friendEntries = friendEntries
+                    )
+                }
 
-                    item {
-                        ShuffleCardsGroup(config)
-                    }
+                item {
+                    ShuffleCardsGroup(config)
                 }
             }
         }
+    }
 }
 
 private val CardScore.color: Color
     @Composable get() {
-        // Dark colors won't be visible in dark theme
-        val score = if (MaterialTheme.colors.isLight)
-            this
-        else CardScore(type, CardAffinityEnum.Resist)
-
-        return colorResource(score.getColorRes())
+        return colorResource(getColorRes())
     }
 
 @Composable
@@ -281,7 +277,8 @@ private fun CardPrioritySummary(cardPriority: CardPriorityPerWave) {
                 Text(
                     "W${wave + 1}: ",
                     modifier = Modifier
-                        .padding(end = 16.dp)
+                        .padding(end = 16.dp),
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Card {
@@ -294,13 +291,21 @@ private fun CardPrioritySummary(cardPriority: CardPriorityPerWave) {
                                 Text(
                                     ",",
                                     modifier = Modifier
-                                        .padding(end = 4.dp)
+                                        .padding(end = 4.dp),
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                             }
 
                             Text(
                                 it.toString(),
-                                color = it.color
+                                color = it.color,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    shadow = Shadow(
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        offset = Offset(1f, 1f),
+                                        blurRadius = 0f
+                                    )
+                                ),
                             )
                         }
                     }

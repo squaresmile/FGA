@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 32
     }
 
     buildTypes {
@@ -24,15 +24,16 @@ android {
             initWith release
         }
     }
+    namespace 'com.mathewsachin.fategrandautomata.prefs'
 }
 
 dependencies {
     implementation project(':scripts')
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation "com.google.code.gson:gson:$gson_version"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
-    api 'com.fredporciuncula:flow-preferences:1.6.0'
+    api 'com.fredporciuncula:flow-preferences:1.8.0'
 }

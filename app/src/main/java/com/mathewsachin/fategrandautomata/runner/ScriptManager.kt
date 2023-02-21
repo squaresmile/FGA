@@ -107,10 +107,10 @@ class ScriptManager @Inject constructor(
                             recording.close()
                         }
                     } catch (e: Exception) {
-                        val msg = "Failed to stop recording"
+                        val msg = context.getString(R.string.cannot_stop_recording)
                         Timber.e(e, msg)
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(service, msg, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(service, "${msg}: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -136,7 +136,7 @@ class ScriptManager @Inject constructor(
             is AutoLottery.ExitException -> {
                 val msg = when (e.reason) {
                     AutoLottery.ExitReason.PresentBoxFull -> context.getString(R.string.present_box_full)
-                    AutoLottery.ExitReason.ResetDisabled -> context.getString(R.string.lottery_reset_disabled)
+                    AutoLottery.ExitReason.RanOutOfCurrency -> context.getString(R.string.lottery_currency_depleted)
                 }
 
                 messages.notify(msg)
@@ -316,7 +316,7 @@ class ScriptManager @Inject constructor(
             val msg = context.getString(R.string.cannot_start_recording)
             Timber.e(e, msg)
             withContext(Dispatchers.Main) {
-                Toast.makeText(service, msg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(service, "${msg}: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
             null

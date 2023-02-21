@@ -26,8 +26,8 @@ fun IFgoAutomataApi.isInSupport(): Boolean {
 }
 
 fun IFgoAutomataApi.isInventoryFull() =
-    // We only have images for JP and NA
-    prefs.gameServer in listOf(GameServerEnum.En, GameServerEnum.Jp)
+    // We only have images for JP, NA and KR
+    prefs.gameServer in listOf(GameServerEnum.En, GameServerEnum.Jp, GameServerEnum.Kr)
             && images[Images.InventoryFull] in locations.inventoryFullRegion
 
 /**
@@ -52,7 +52,7 @@ class AutoBattle @Inject constructor(
         object Abort : ExitReason()
         class Unexpected(val e: Exception) : ExitReason()
         object CEGet : ExitReason()
-        object CEDropped : ExitReason()
+        class LimitCEs(val count: Int) : ExitReason()
         object FirstClearRewards : ExitReason()
         class LimitMaterials(val count: Int) : ExitReason()
         object WithdrawDisabled : ExitReason()
@@ -74,6 +74,12 @@ class AutoBattle @Inject constructor(
 
     private var isContinuing = false
 
+    // for tracking whether the story skip button could be visible in the current screen
+    private var storySkipPossible = true
+
+    // for tracking whether to check for servant deaths or not
+    private var servantDeathPossible = false
+
     override fun script(): Nothing {
         try {
             loop()
@@ -88,6 +94,7 @@ class AutoBattle @Inject constructor(
         } finally {
             refill.autoDecrement()
             matTracker.autoDecrement()
+            ceDropsTracker.autoDecrement()
 
             val refill = prefs.refill
 
@@ -126,7 +133,6 @@ class AutoBattle @Inject constructor(
         val refillLimit: Int,
         val ceDropCount: Int,
         val materials: Map<MaterialEnum, Int>,
-        val matLimit: Int?,
         val withdrawCount: Int,
         val totalTime: Duration,
         val averageTimePerRun: Duration,
@@ -143,7 +149,6 @@ class AutoBattle @Inject constructor(
             refillLimit = prefs.refill.repetitions,
             ceDropCount = ceDropsTracker.count,
             materials = matTracker.farmed,
-            matLimit = if (prefs.refill.shouldLimitMats) prefs.refill.limitMats else null,
             withdrawCount = withdraw.count,
             totalTime = state.totalBattleTime,
             averageTimePerRun = state.averageTimePerRun,
@@ -158,8 +163,13 @@ class AutoBattle @Inject constructor(
         // if the validator function evaluates to true, the associated action function is called
         val screens: Map<() -> Boolean, () -> Unit> = mapOf(
             { connectionRetry.needsToRetry() } to { connectionRetry.retry() },
-            { battle.isIdle() } to { battle.performBattle() },
+            { battle.isIdle() } to {
+                storySkipPossible = false
+                battle.performBattle()
+                servantDeathPossible = true
+            },
             { isInMenu() } to { menu() },
+            { isStartingNp() } to { skipNp() },
             { isInResult() } to { result() },
             { isInDropsScreen() } to { dropScreen() },
             { isInQuestRewardScreen() } to { questReward() },
@@ -170,8 +180,8 @@ class AutoBattle @Inject constructor(
             { isFriendRequestScreen() } to { skipFriendRequestScreen() },
             { isBond10CEReward() } to { bond10CEReward() },
             { isCeRewardDetails() } to { ceRewardDetails() },
-            { isDeathAnimation() } to { locations.battle.skipDeathAnimationClick.click() },
-            { isGudaFinal() } to { gudaFinal() }
+            { isDeathAnimation() } to { locations.battle.extraInfoWindowCloseClick.click() }
+
         )
 
         // Loop through SCREENS until a Validator returns true
@@ -186,7 +196,7 @@ class AutoBattle @Inject constructor(
 
             actor?.invoke()
 
-            1.seconds.wait()
+            0.5.seconds.wait()
         }
     }
 
@@ -247,9 +257,9 @@ class AutoBattle @Inject constructor(
         images[Images.CEDetails] in locations.resultCeRewardDetailsRegion
 
     private fun isDeathAnimation() =
-        FieldSlot.list
+        servantDeathPossible && FieldSlot.list
             .map { locations.battle.servantPresentRegion(it) }
-            .count { images[Images.ServantExist] in it } in 1..2
+            .count { it.exists(images[Images.ServantExist], similarity = 0.70) } in 1..2
 
     private fun ceRewardDetails() {
         if (prefs.stopOnCEGet) {
@@ -265,8 +275,11 @@ class AutoBattle @Inject constructor(
     /**
      * Clicks through the reward screens.
      */
-    private fun result() =
+    private fun result() {
+        servantDeathPossible = false
         locations.resultClick.click(15)
+        storySkipPossible = true
+    }
 
     private fun isInDropsScreen() =
         images[Images.MatRewards] in locations.resultMatRewardsRegion
@@ -284,6 +297,7 @@ class AutoBattle @Inject constructor(
     private fun repeatQuest() {
         // Needed to show we don't need to enter the "StartQuest" function
         isContinuing = true
+        storySkipPossible = false
 
         // Pressing Continue option after completing a quest, resetting the state as would occur in "Menu" function
         battle.resetState()
@@ -356,7 +370,8 @@ class AutoBattle @Inject constructor(
      * Checks if the SKIP button exists on the screen.
      */
     private fun needsToStorySkip() =
-        prefs.storySkip && locations.menuStorySkipRegion.exists(images[Images.StorySkip], similarity = 0.7)
+        prefs.storySkip && storySkipPossible &&
+                locations.menuStorySkipRegion.exists(images[Images.StorySkip], similarity = 0.7)
 
     private fun skipStory() {
         locations.menuStorySkipClick.click()
@@ -364,10 +379,19 @@ class AutoBattle @Inject constructor(
         locations.menuStorySkipYesClick.click()
     }
 
-    private fun isGudaFinal() = prefs.gameServer == GameServerEnum.En &&
-            images[Images.GudaFinalReward] in locations.gudaFinalRegion
+    /**
+     * Checks if BetterFGO is running and an NP is starting.
+     */
+    private fun isStartingNp() =
+        prefs.gameServer.betterFgo && locations.npStartedRegion.isWhite()
 
-    private fun gudaFinal() = locations.gudaFinalRegion.click()
+    /**
+     * Taps in the top right a few times to trigger NP skip in BetterFGO.
+     */
+    private fun skipNp() {
+        0.6.seconds.wait()
+        locations.battle.extraInfoWindowCloseClick.click(5)
+    }
 
     /**
      * Starts the quest after the support has already been selected. The following features are done optionally:
@@ -383,16 +407,19 @@ class AutoBattle @Inject constructor(
         2.seconds.wait()
 
         useBoostItem()
+        storySkipPossible = true
     }
 
     /**
      * Will show a toast informing the user of number of runs and how many apples have been used so far.
+     * Also shows CE drop count (if any have dropped).
      */
     private fun showRefillsAndRunsMessage() =
         messages.notify(
             ScriptNotify.BetweenRuns(
                 refills = refill.timesRefilled,
-                runs = state.runs
+                runs = state.runs,
+                ceDrops = ceDropsTracker.count
             )
         )
 

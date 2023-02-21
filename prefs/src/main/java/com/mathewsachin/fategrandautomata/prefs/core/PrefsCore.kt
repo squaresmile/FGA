@@ -32,7 +32,6 @@ class PrefsCore @Inject constructor(
     val storySkip = maker.bool("story_skip")
     val withdrawEnabled = maker.bool("withdraw_enabled")
 
-    val stopOnCEDrop = maker.bool("stop_on_ce_drop")
     val stopOnCEGet = maker.bool("stop_on_ce_get")
     val stopOnFirstClearRewards = maker.bool("stop_on_first_clear_rewards")
 
@@ -52,7 +51,6 @@ class PrefsCore @Inject constructor(
 
     val shouldLimitFP = maker.bool("should_fp_limit")
     val limitFP = maker.int("fp_limit", 1)
-    val preventLotteryBoxReset = maker.bool("prevent_lottery_reset")
     val receiveEmbersWhenGiftBoxFull = maker.bool("receive_embers_when_gift_box_full")
 
     val supportSwipesPerUpdate = maker.int("support_swipes_per_update_x", 10)

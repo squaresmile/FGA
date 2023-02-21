@@ -25,8 +25,9 @@ class Refill @Inject constructor(
         if (refill.resources.isNotEmpty()
             && timesRefilled < refill.repetitions
         ) {
+            //TODO check for OK image between each resource
             refill.resources
-                .map { locations.locate(it) }
+                .flatMap { locations.locate(it) }
                 .forEach { it.click() }
 
             1.seconds.wait()
@@ -44,7 +45,7 @@ class Refill @Inject constructor(
     }
 
     fun refill() {
-        while (images[Images.Stamina] in locations.staminaScreenRegion) {
+        if (images[Images.Stamina] in locations.staminaScreenRegion) {
             refillOnce()
         }
     }

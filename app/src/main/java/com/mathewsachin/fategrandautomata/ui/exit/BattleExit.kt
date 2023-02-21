@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -47,7 +47,7 @@ private fun AutoBattle.ExitReason.text(): String = when (this) {
         }
     }
     AutoBattle.ExitReason.CEGet -> stringResource(R.string.ce_get)
-    AutoBattle.ExitReason.CEDropped -> stringResource(R.string.ce_dropped)
+    is AutoBattle.ExitReason.LimitCEs -> stringResource(R.string.ces_dropped, count)
     is AutoBattle.ExitReason.LimitMaterials -> stringResource(R.string.mats_farmed, count)
     AutoBattle.ExitReason.WithdrawDisabled -> stringResource(R.string.withdraw_disabled)
     AutoBattle.ExitReason.APRanOut -> stringResource(R.string.script_msg_ap_ran_out)
@@ -59,8 +59,8 @@ private fun AutoBattle.ExitReason.text(): String = when (this) {
     is AutoBattle.ExitReason.SkillCommandParseError -> "AutoSkill Parse error:\n\n${e.message}"
     is AutoBattle.ExitReason.CardPriorityParseError -> msg
     AutoBattle.ExitReason.FirstClearRewards -> stringResource(R.string.first_clear_rewards)
-    AutoBattle.ExitReason.Paused -> "PAUSED"
-    AutoBattle.ExitReason.StopAfterThisRun -> "Stop after this run"
+    AutoBattle.ExitReason.Paused -> stringResource(R.string.script_paused)
+    AutoBattle.ExitReason.StopAfterThisRun -> stringResource(R.string.stop_after_this_run)
 }
 
 @Composable
@@ -84,7 +84,7 @@ private fun LazyListScope.battleExitContent(
     item {
         Text(
             reason.text(),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp, top = 5.dp)
@@ -116,11 +116,11 @@ private fun LazyListScope.battleExitContent(
         }
     }
 
-    if (reason !is AutoBattle.ExitReason.CEDropped  && state.ceDropCount > 0) {
+    if (reason !is AutoBattle.ExitReason.LimitCEs && state.ceDropCount > 0) {
         item {
             Text(
-                "${state.ceDropCount} ${stringResource(R.string.ce_dropped)}",
-                color = MaterialTheme.colors.secondary,
+                stringResource(R.string.ces_dropped, state.ceDropCount),
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .padding(16.dp, 5.dp)
             )
@@ -173,7 +173,7 @@ private fun LazyListScope.battleExitContent(
         item {
             Text(
                 stringResource(R.string.times_withdrew, state.withdrawCount),
-                color = MaterialTheme.colors.error,
+                color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
                     .padding(16.dp, 5.dp)
             )
@@ -227,7 +227,7 @@ private fun MaterialSummary(
 
                     Text(
                         "x$count",
-                        color = MaterialTheme.colors.secondary
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
             }
@@ -262,7 +262,7 @@ private fun SmallChip(
 
             Text(
                 text,
-                style = MaterialTheme.typography.subtitle2
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
@@ -303,9 +303,9 @@ fun BattleExit(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Stop after this run",
-                        style = MaterialTheme.typography.body2,
-                        color = MaterialTheme.colors.secondary
+                        stringResource(R.string.stop_after_this_run),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary
                     )
 
                     var stopAfterThisRun by prefsCore.stopAfterThisRun.remember()
@@ -365,7 +365,6 @@ fun PreviewBattleExitContent() {
 //                        MaterialEnum.ShellOfReminiscence to 2,
 //                        MaterialEnum.Chain to 5
 //                    ),
-                    matLimit = 6,
                     withdrawCount = 1,
                     totalTime = 1880.seconds,
                     averageTimePerRun = 75.seconds,

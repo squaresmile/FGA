@@ -9,7 +9,7 @@ import androidx.activity.result.launch
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -193,7 +193,7 @@ private fun MainScreenContent(
 
                     item {
                         HeadingButton(
-                            text = stringResource(R.string.p_nav_troubleshoot),
+                            text = stringResource(R.string.troubleshoot),
                             onClick = { navigate(MainScreenDestinations.TroubleshootingGuide) }
                         )
                     }
@@ -250,14 +250,14 @@ private fun OverlayServiceToggleButton(
 ) {
     val backgroundColor by animateColorAsState(
         if (serviceStarted)
-            MaterialTheme.colors.error
-        else MaterialTheme.colors.secondary
+            MaterialTheme.colorScheme.error
+        else MaterialTheme.colorScheme.secondary
     )
 
     val foregroundColor =
         if (serviceStarted)
-            MaterialTheme.colors.onError
-        else MaterialTheme.colors.onSecondary
+            MaterialTheme.colorScheme.onError
+        else MaterialTheme.colorScheme.onSecondary
 
     ExtendedFloatingActionButton(
         text = {
@@ -274,7 +274,7 @@ private fun OverlayServiceToggleButton(
                 tint = foregroundColor
             )
         },
-        backgroundColor = backgroundColor,
+        containerColor = backgroundColor,
         modifier = modifier
             .padding(16.dp)
     )
@@ -296,14 +296,14 @@ private fun AccessibilityServiceBlock(
                 .padding(16.dp, 5.dp)
         ) {
             Row {
-                Text("Accessibility Service: ")
+                Text(stringResource(R.string.accessibility_service))
 
                 Text(
-                    if (serviceStarted) "ENABLED" else "DISABLED",
+                    stringResource(if (serviceStarted) R.string.accessibility_enabled else R.string.accessibility_disabled),
                     modifier = Modifier
                         .padding(start = 5.dp),
                     color = colorResource(if (serviceStarted) R.color.colorQuickResist else R.color.colorBusterResist),
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
 
@@ -313,7 +313,7 @@ private fun AccessibilityServiceBlock(
                 enabled = !serviceStarted || !overlayServiceStarted
             ) {
                 Text(
-                    if (serviceStarted) "DISABLE" else "ENABLE IN SETTINGS"
+                    stringResource(if (serviceStarted) R.string.accessibility_disable else R.string.accessibility_enable_in_settings)
                 )
             }
         }

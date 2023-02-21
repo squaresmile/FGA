@@ -97,7 +97,7 @@
     <string name="p_limit">Limit</string>
     <string name="p_runs">Runs</string>
     <string name="p_roll_limit">Limit number of rolls</string>
-    <string name="p_prevent_lottery_box_reset">Prevent box reset</string>
+    <string name="p_receive_embers">Receive embers</string>
 
     <string name="p_battle_config_name">Name</string>
     <string name="p_battle_config_cmd">Command</string>
@@ -105,6 +105,7 @@
     <string name="p_battle_config_party">Party</string>
     <string name="p_battle_config_server">Server</string>
     <string name="p_battle_config_card_priority">Card Priority</string>
+    <string name="p_battle_config_servant_priority">Use Servant Priority</string>
     <string name="p_battle_config_support">Support</string>
     <string name="p_battle_config_support_selection_mode">Selection Mode</string>
     <string name="p_battle_config_support_fallback_selection_mode">Fallback</string>
@@ -126,7 +127,6 @@
     <string name="p_story_skip">Story Skip</string>
     <string name="p_skill_confirmation">Skill Confirmation</string>
     <string name="p_enable_withdraw">Enable Withdraw</string>
-    <string name="p_stop_on_ce_drop">Stop on CE drop</string>
     <string name="p_stop_on_ce_get">Stop on CE GET</string>
     <string name="p_stop_on_first_clear_rewards">Stop on first-clear rewards</string>
     <string name="p_stop_on_ce_get_summary">First-time quest completion rewards and Bond CEs (Experimental)</string>
@@ -137,6 +137,8 @@
     <string name="p_boost_item">Boost Item</string>
     <string name="p_brave_chains">Brave Chains</string>
     <string name="p_rearrange_cards">Rearrange Cards</string>
+    <string name="p_skip_servant_face_checks">Skip servant face-card checks</string>
+    <string name="p_skip_servant_face_checks_summary">Brave chains, servant priority, NP-matching card shuffle, etc. won\'t work</string>
 
     <string name="p_wait_ap_regen_text">Wait for AP Regeneration</string>
     <string name="wait_ap_regen_toast_message">Waiting for AP regeneration. Rechecking in %d minute(s).</string>
@@ -154,12 +156,13 @@
     <string name="p_debug_mode">Debug mode</string>
     <string name="p_debug_mode_summary">Highlight the regions being matched</string>
     <string name="p_ignore_notch">Ignore Notch calculation</string>
-    <string name="p_ignore_notch_summary">Turn this ON if FGO doesn\'t leave the notch area blank</string>
+    <string name="p_ignore_notch_summary">This setting only has an effect on FGO TW. Turn this on if FGO doesn\'t leave the notch area black.</string>
     <string name="p_record_screen">Record Screen</string>
     <string name="p_record_screen_summary">A file named \'record.mp4\' will be saved to output folder.\nCopy or rename it if you want to keep it.</string>
     <string name="p_root_screenshot">Use Root for Screenshots</string>
     <string name="p_root_screenshot_summary">Useful on Nox (Android 7). Toggle service after changing this.</string>
     <string name="p_auto_start_service">Auto-start service</string>
+    <string name="p_thresholded_stage_counter">Thresholded stage counter detection</string>
 
     <string name="p_fine_tune">Fine-tune</string>
     <string name="p_fine_tune_support">Support</string>
@@ -183,13 +186,14 @@
     <string name="p_fine_tune_wait_before_cards">Wait before Cards</string>
     <string name="p_fine_tune_wait_multiplier">Wait Multiplier</string>
 
-    <string name="p_nav_troubleshoot">Troubleshooting</string>
-    <string name="p_nav_battle_config_edit">Edit config</string>
-    <string name="p_nav_card_priority">Card Priority</string>
+    <string name="troubleshoot">Troubleshooting</string>
+    <string name="battle_config_edit">Edit config</string>
+    <string name="card_priority">Card Priority</string>
 
     <string name="p_refill_type_gold">Gold</string>
     <string name="p_refill_type_silver">Silver</string>
     <string name="p_refill_type_bronze">Bronze</string>
+    <string name="p_refill_type_copper">Copper</string>
     <string name="p_refill_type_sq">SQ</string>
 
     <string name="p_brave_chains_don_t_care">Don\'t care</string>
@@ -199,6 +203,9 @@
     <string name="p_boost_item_disabled">Disabled</string>
     <string name="p_boost_item_skip">Skip</string>
 
+    <string name="spam">Spam mode</string>
+    <string name="spam_target">Target</string>
+    <string name="spam_np">NP:</string>
     <string name="p_spam_none">None</string>
     <string name="p_spam_spam">Spam</string>
     <string name="p_spam_danger">Danger</string>
@@ -233,12 +240,18 @@
     <string name="overlay_notification_text">Overlay service running</string>
     <string name="notification_stop">Stop</string>
 
+    <string name="accessibility_service">"Accessibility Service: "</string>
+    <string name="accessibility_enabled">ENABLED</string>
+    <string name="accessibility_disabled">DISABLED</string>
+    <string name="accessibility_disable">DISABLE</string>
+    <string name="accessibility_enable_in_settings">ENABLE IN SETTINGS</string>
     <string name="accessibility_disabled_title">Accessibility Disabled</string>
     <string name="accessibility_disabled_message">Turn on accessibility for this app from System settings. If it is already On, turn it OFF and start again.</string>
     <string name="accessibility_disabled_go_to_settings">Go To Settings</string>
     <string name="draw_overlay_disabled_title">Missing overlay permission</string>
     <string name="draw_overlay_disabled_message">Please allow this app to draw over other apps. It is used to draw the control buttons.</string>
-    <string name="cannot_start_recording">Couldn\'t start recording</string>
+    <string name="cannot_start_recording">Failed to start recording</string>
+    <string name="cannot_stop_recording">Failed to stop recording</string>
     <string name="unexpected_error_copy">Copy</string>
 
     <string name="script_msg_ap_ran_out">AP ran out!</string>
@@ -247,7 +260,7 @@
     <string name="screen_turned_off">Script paused due to screen turning off</string>
     <string name="unexpected_error">Unexpected Error</string>
     <string name="script_exited">Script Exited</string>
-    <string name="lottery_reset_disabled">Lottery box reset is disabled</string>
+    <string name="lottery_currency_depleted">Ran out of lottery currency</string>
     <string name="inventory_full">Inventory Full</string>
     <string name="present_box_full">Present Box Full</string>
     <string name="support_img_maker_not_found">No support images were found on the current screen. Are you on Support selection or Friend list screen?</string>
@@ -258,10 +271,13 @@
     <string name="ce_get">CE GET!</string>
     <string name="first_clear_rewards">First-clear rewards!</string>
     <string name="withdraw_disabled">All servants have been defeated and auto-withdrawing is disabled.</string>
+    <string name="stop_after_this_run">Stop after this run</string>
     <string name="times_ran">Ran %d time(s)</string>
     <string name="times_ran_out_of">Ran %1$d out of %2$d time(s)</string>
     <string name="refills_used_out_of">%1$d refills used out of %2$d</string>
-    <string name="failed_to_determine_card_type">Failed to determine Card type: %s</string>
+    <string name="failed_to_determine_card">Failed to determine Card: %s</string>
+    <string name="unknown_card_type">Card type could not be detected (Buster, Quick, Arts)</string>
+    <string name="unknown_servant_card">Card belongs to an unknown Servant</string>
     <string name="support_list_updated_in">Support list will be updated in %s</string>
     <string name="times_withdrew">Withdrew %d times</string>
     <string name="avg_time_per_run">Average time per run: %s</string>
@@ -269,9 +285,13 @@
     <string name="turns_stats">Turns: %1$d (min), %2$d (avg), %3$d (max)</string>
     <string name="picked_exp_stacks">Picked %d EXP stacks</string>
     <string name="no_embers_found">Couldn\'t find Embers on screen. Make sure that you\'ve filtered for EXP cards.</string>
+    <string name="root_failed">Failed to get root access</string>
 
     <string name="p_mats">Materials</string>
     <string name="mats_farmed">Farmed %d material(s)</string>
+
+    <string name="p_ces">CEs</string>
+    <string name="ces_dropped">%d CE(s) dropped</string>
 
     <string name="times_rolled">Rolled %d time(s)</string>
 
@@ -324,6 +344,48 @@
     <string name="mat_demon_lantern">Demon Flame Lantern</string>
     <string name="mat_amnesty_bell">Tiny Bell of Amnesty</string>
     <string name="mat_fantasy_scales">Scales of Fantasies</string>
+    <string name="mat_ceremonial_blade">Twilight Ceremonial Blade</string>
+    <string name="mat_ashes">Unforgettable Ashes</string>
+
+    <string name="mat_monument_saber">Saber Monument</string>
+    <string name="mat_monument_archer">Archer Monument</string>
+    <string name="mat_monument_lancer">Lancer Monument</string>
+    <string name="mat_monument_rider">Rider Monument</string>
+    <string name="mat_monument_caster">Caster Monument</string>
+    <string name="mat_monument_asssassin">Assassin Monument</string>
+    <string name="mat_monument_berserker">Berserker Monument</string>
+
+    <string name="mat_piece_saber">Saber Piece</string>
+    <string name="mat_piece_archer">Archer Piece</string>
+    <string name="mat_piece_lancer">Lancer Piece</string>
+    <string name="mat_piece_rider">Rider Piece</string>
+    <string name="mat_piece_caster">Caster Piece</string>
+    <string name="mat_piece_asssassin">Assassin Piece</string>
+    <string name="mat_piece_berserker">Berserker Piece</string>
+
+    <string name="mat_skill_gold_saber">Secret Gem of Saber</string>
+    <string name="mat_skill_gold_archer">Secret Gem of Archer</string>
+    <string name="mat_skill_gold_lancer">Secret Gem of Lancer</string>
+    <string name="mat_skill_gold_rider">Secret Gem of Rider</string>
+    <string name="mat_skill_gold_caster">Secret Gem of Caster</string>
+    <string name="mat_skill_gold_asssassin">Secret Gem of Assassin</string>
+    <string name="mat_skill_gold_berserker">Secret Gem of Berserker</string>
+
+    <string name="mat_skill_red_saber">Magic Gem of Saber</string>
+    <string name="mat_skill_red_archer">Magic Gem of Archer</string>
+    <string name="mat_skill_red_lancer">Magic Gem of Lancer</string>
+    <string name="mat_skill_red_rider">Magic Gem of Rider</string>
+    <string name="mat_skill_red_caster">Magic Gem of Caster</string>
+    <string name="mat_skill_red_asssassin">Magic Gem of Assassin</string>
+    <string name="mat_skill_red_berserker">Magic Gem of Berserker</string>
+
+    <string name="mat_skill_blue_saber">Gem of Saber</string>
+    <string name="mat_skill_blue_archer">Gem of Archer</string>
+    <string name="mat_skill_blue_lancer">Gem of Lancer</string>
+    <string name="mat_skill_blue_rider">Gem of Rider</string>
+    <string name="mat_skill_blue_caster">Gem of Caster</string>
+    <string name="mat_skill_blue_asssassin">Gem of Assassin</string>
+    <string name="mat_skill_blue_berserker">Gem of Berserker</string>
 
     <string name="p_shuffle_cards">Shuffle cards</string>
     <string name="p_shuffle_cards_wave">Wave</string>
@@ -331,4 +393,14 @@
     <string name="p_shuffle_cards_when_none">None</string>
     <string name="p_shuffle_cards_when_no_effective">No effective cards</string>
     <string name="p_shuffle_cards_when_no_np_matching">No cards matching NP</string>
+
+    <string name="p_game_area_mode">Game Area Mode</string>
+    <string name="p_game_area_default">Default</string>
+    <string name="p_game_area_duo">Surface Duo</string>
+    <string name="p_game_area_xperia">Sony Xperia</string>
+    <string name="p_game_area_custom">Custom</string>
+    <string name="p_game_area_custom_left">Left</string>
+    <string name="p_game_area_custom_top">Top</string>
+    <string name="p_game_area_custom_right">Right</string>
+    <string name="p_game_area_custom_bottom">Bottom</string>
 </resources>

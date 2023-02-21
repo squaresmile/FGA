@@ -94,7 +94,13 @@ class ScriptMessages @Inject constructor(
             ScriptNotify.CEDropped -> notify(context.getString(R.string.ce_dropped))
             ScriptNotify.CEGet -> notify(context.getString(R.string.ce_get))
             is ScriptNotify.FailedToDetermineCards -> {
-                val msg = context.getString(R.string.failed_to_determine_card_type, action.cards)
+                var msg = context.getString(R.string.failed_to_determine_card, action.cards)
+                if (action.unknownCardTypes) {
+                    msg += "\n" + context.getString(R.string.unknown_card_type)
+                }
+                if (action.unknownServants) {
+                    msg += "\n" + context.getString(R.string.unknown_servant_card)
+                }
 
                 toast(msg)
 
@@ -113,7 +119,8 @@ class ScriptMessages @Inject constructor(
             is ScriptNotify.BetweenRuns -> {
                 val msg = makeRefillAndRunsMessage(
                     timesRefilled = action.refills,
-                    timesRan = action.runs
+                    timesRan = action.runs,
+                    ceDropCount = action.ceDrops
                 )
 
                 toast(msg)
@@ -122,7 +129,8 @@ class ScriptMessages @Inject constructor(
 
     private fun makeRefillAndRunsMessage(
         timesRan: Int,
-        timesRefilled: Int
+        timesRefilled: Int,
+        ceDropCount: Int
     ) = buildString {
         val refill = prefs.refill
 
@@ -133,6 +141,12 @@ class ScriptMessages @Inject constructor(
         } else if (timesRan > 0) {
             appendLine(
                 context.getString(R.string.times_ran, timesRan)
+            )
+        }
+
+        if (ceDropCount > 0) {
+            appendLine(
+                context.getString(R.string.ces_dropped, ceDropCount)
             )
         }
 

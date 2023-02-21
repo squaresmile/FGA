@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,11 +19,13 @@ import com.google.accompanist.pager.rememberPagerState
 import com.mathewsachin.fategrandautomata.R
 import com.mathewsachin.fategrandautomata.scripts.enums.SpamEnum
 import com.mathewsachin.fategrandautomata.scripts.models.SkillSpamTarget
+import com.mathewsachin.fategrandautomata.ui.FGAListItemColors
 import com.mathewsachin.fategrandautomata.ui.Heading
 import com.mathewsachin.fategrandautomata.ui.HeadingButton
 import com.mathewsachin.fategrandautomata.ui.prefs.MultiSelectChip
 import com.mathewsachin.fategrandautomata.ui.prefs.SwitchPreference
 import com.mathewsachin.fategrandautomata.ui.prefs.listDialog
+import com.mathewsachin.fategrandautomata.util.stringRes
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,7 +71,7 @@ fun SpamScreen(
                     Box(
                         modifier = Modifier
                             .background(
-                                color = if (isSelected) MaterialTheme.colors.secondary else Color.Transparent,
+                                color = if (isSelected) MaterialTheme.colorScheme.secondary else Color.Transparent,
                                 shape = MaterialTheme.shapes.medium
                             )
                             .clickable { scope.launch { pagerState.animateScrollToPage(it - 1) } }
@@ -77,7 +79,7 @@ fun SpamScreen(
                     ) {
                         Text(
                             it.toString(),
-                            color = if (isSelected) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onSurface
+                            color = if (isSelected) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -134,7 +136,7 @@ private fun NpSpamView(
         modifier = Modifier
             .padding(start = 16.dp)
     ) {
-        Text("NP:")
+        Text(stringResource(R.string.spam_np))
 
         var selectedSpamMode by spamConfig.spamMode
         var selectedWaves by spamConfig.waves
@@ -234,15 +236,16 @@ private fun SelectSpamMode(
     val dialog = listDialog(
         selected = selected,
         onSelectedChange = onSelectChange,
-        entries = SpamEnum.values().associateWith { it.toString() },
-        title = "Spam mode"
+        entries = SpamEnum.values().associateWith { stringResource(it.stringRes) },
+        title = stringResource(R.string.spam)
     )
 
     ListItem(
-        text = { Text("Mode") },
-        secondaryText = { Text(selected.toString()) },
+        headlineText = { Text(stringResource(R.string.spam)) },
+        supportingText = { Text(stringResource(selected.stringRes)) },
         modifier = modifier
-            .clickable { dialog.show() }
+            .clickable { dialog.show() },
+        colors = FGAListItemColors()
     )
 }
 
@@ -256,14 +259,15 @@ private fun SelectTarget(
         selected = selected,
         onSelectedChange = onSelectChange,
         entries = SkillSpamTarget.values().associateWith { it.toString() },
-        title = "Target"
+        title = stringResource(R.string.spam_target)
     )
 
     ListItem(
-        text = { Text("Target") },
-        secondaryText = { Text(selected.toString()) },
+        headlineText = { Text(stringResource(R.string.spam_target)) },
+        supportingText = { Text(selected.toString()) },
         modifier = modifier
-            .clickable { dialog.show() }
+            .clickable { dialog.show() },
+        colors = FGAListItemColors()
     )
 }
 

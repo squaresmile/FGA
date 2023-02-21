@@ -4,8 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -18,8 +18,8 @@ import com.mathewsachin.fategrandautomata.prefs.core.BattleConfigCore
 import com.mathewsachin.fategrandautomata.scripts.enums.GameServerEnum
 import com.mathewsachin.fategrandautomata.ui.FgaDialog
 import com.mathewsachin.fategrandautomata.ui.GroupSelectorItem
-import com.mathewsachin.fategrandautomata.ui.more.displayStringRes
 import com.mathewsachin.fategrandautomata.ui.prefs.remember
+import com.mathewsachin.fategrandautomata.util.stringRes
 
 @Composable
 fun ServerSelection(config: BattleConfigCore) {
@@ -38,7 +38,7 @@ fun ServerSelection(config: BattleConfigCore) {
             ) {
                 items(GameServerEnum.values()) {
                     GroupSelectorItem(
-                        stringResource(it.displayStringRes),
+                        stringResource(it.stringRes),
                         isSelected = it == server.asGameServer(),
                         onSelect = {
                             server = BattleConfigCore.Server.Set(it)
@@ -67,12 +67,12 @@ fun ServerSelection(config: BattleConfigCore) {
     ) {
         Text(
             stringResource(R.string.p_battle_config_server).uppercase(),
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.bodySmall
         )
 
         Text(
-            server.asGameServer()?.let { stringResource(it.displayStringRes) } ?: "--",
-            style = MaterialTheme.typography.caption
+            server.asGameServer()?.let { stringResource(it.stringRes) } ?: "--",
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

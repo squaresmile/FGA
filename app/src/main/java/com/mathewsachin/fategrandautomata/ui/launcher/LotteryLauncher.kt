@@ -2,10 +2,10 @@ package com.mathewsachin.fategrandautomata.ui.launcher
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +19,6 @@ fun lotteryLauncher(
     prefs: IPreferences,
     modifier: Modifier = Modifier
 ): ScriptLauncherResponseBuilder {
-    var preventReset by remember { mutableStateOf(prefs.preventLotteryBoxReset) }
     var receiveEmbers by remember { mutableStateOf(prefs.receiveEmbersWhenGiftBoxFull) }
     var maxGoldEmberStackSize by remember { mutableStateOf(prefs.maxGoldEmberSetSize) }
 
@@ -30,7 +29,7 @@ fun lotteryLauncher(
     ) {
         Text(
             stringResource(R.string.p_script_mode_lottery),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.titleLarge
         )
 
         Divider(
@@ -44,32 +43,13 @@ fun lotteryLauncher(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { preventReset = !preventReset }
-        ) {
-            Text(
-                stringResource(R.string.p_prevent_lottery_box_reset),
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.secondary
-            )
-
-            Switch(
-                checked = preventReset,
-                onCheckedChange = { preventReset = it }
-            )
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
                 .padding(vertical = 5.dp)
                 .clickable { receiveEmbers = !receiveEmbers }
         ) {
             Text(
-                "Receive embers",
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.secondary
+                stringResource(R.string.p_receive_embers),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary
             )
 
             Switch(
@@ -90,7 +70,6 @@ fun lotteryLauncher(
         canBuild = { true },
         build = {
             ScriptLauncherResponse.Lottery(
-                preventReset,
                 if (receiveEmbers) ScriptLauncherResponse.GiftBox(maxGoldEmberStackSize) else null
             )
         }

@@ -36,7 +36,7 @@ class AutoGiftBox @Inject constructor(
             ?: throw ExitException(ExitReason.NoEmbersFound)
 
         val checkRegion = Region(xpOffsetX + 1320, 350, 140, 1500)
-        val scrollEndRegion = Region(100 + checkRegion.x, 1421, 320, 19)
+        val scrollEndRegion = Region(100 + checkRegion.x, 1320, 320, 60)
         val receiveSelectedClick = Location(1890 + xpOffsetX, 750)
         val receiveEnabledRegion = Region(1755 + xpOffsetX, 410, 290, 60)
 
@@ -116,7 +116,7 @@ class AutoGiftBox @Inject constructor(
             val countRegion = when (prefs.gameServer) {
                 GameServerEnum.Jp, GameServerEnum.Tw, GameServerEnum.Cn -> -940
                 GameServerEnum.En -> -830
-                GameServerEnum.Kr -> -960
+                GameServerEnum.Kr -> -1010
             }.let { x -> Region(x, -120, 300, 100) } + gift.region.location
 
             val iconRegion = Region(-1480, -116, 300, 240) + gift.region.location

@@ -13,7 +13,6 @@ interface IPreferences {
     var selectedBattleConfig: IBattleConfig
     val storySkip: Boolean
     val withdrawEnabled: Boolean
-    val stopOnCEDrop: Boolean
     val stopOnCEGet: Boolean
     val stopOnFirstClearRewards: Boolean
     val boostItemSelectionMode: Int
@@ -31,7 +30,6 @@ interface IPreferences {
 
     var shouldLimitFP: Boolean
     var limitFP: Int
-    var preventLotteryBoxReset: Boolean
     var receiveEmbersWhenGiftBoxFull: Boolean
 
     val stageCounterSimilarity: Double
@@ -51,5 +49,3 @@ interface IPreferences {
 }
 
 val IPreferences.wantsMediaProjectionToken get() = !useRootForScreenshots
-
-val IPreferences.isNewUI get() = gameServer in listOf(GameServerEnum.Jp, GameServerEnum.En, GameServerEnum.Kr, GameServerEnum.Cn)

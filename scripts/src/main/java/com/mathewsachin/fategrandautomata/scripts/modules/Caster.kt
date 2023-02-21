@@ -28,10 +28,8 @@ class Caster @Inject constructor(
 
     private fun waitForAnimationToFinish(timeout: Duration = 5.seconds) {
         val img = images[Images.BattleScreen]
-
         // slow devices need this. do not remove.
         locations.battle.screenCheckRegion.waitVanish(img, 2.seconds)
-
         locations.battle.screenCheckRegion.exists(img, timeout)
     }
 
@@ -53,10 +51,12 @@ class Caster @Inject constructor(
             prefs.skillDelay.wait()
 
             selectSkillTarget(target)
-        } else {
-            // Close the window that opens up if skill is on cool-down
-            locations.battle.extraInfoWindowCloseClick.click()
         }
+
+        // Close the window that opens up if skill is on cool-down
+        // Also triggers skill speedup for FGO servers with that feature
+        // If we wait for too long here, the vanishing Attack button will not be detected in waitForAnimationToFinish()
+        locations.battle.extraInfoWindowCloseClick.click()
 
         waitForAnimationToFinish()
     }
@@ -94,11 +94,6 @@ class Caster @Inject constructor(
         }
 
         locations.battle.locate(actualTarget).click()
-
-        0.5.seconds.wait()
-
-        // Exit any extra menu
-        locations.battle.extraInfoWindowCloseClick.click()
     }
 
     private fun openMasterSkillMenu() {
@@ -131,7 +126,9 @@ class Caster @Inject constructor(
         locations.battle.orderChangeOkClick.click()
 
         // Extra wait to allow order change dialog to close
-        1.seconds.wait()
+        0.3.seconds.wait()
+        // speed up animation
+        locations.battle.extraInfoWindowCloseClick.click()
 
         waitForAnimationToFinish(15.seconds)
 

@@ -6,7 +6,6 @@ import com.mathewsachin.fategrandautomata.scripts.enums.GameServerEnum
 import com.mathewsachin.fategrandautomata.scripts.prefs.*
 import com.mathewsachin.libautomata.PlatformPrefs
 import javax.inject.Inject
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class PreferencesImpl @Inject constructor(
@@ -51,8 +50,6 @@ class PreferencesImpl @Inject constructor(
 
     override val withdrawEnabled by prefs.withdrawEnabled
 
-    override val stopOnCEDrop by prefs.stopOnCEDrop
-
     override val stopOnCEGet by prefs.stopOnCEGet
 
     override val stopOnFirstClearRewards by prefs.stopOnFirstClearRewards
@@ -94,8 +91,6 @@ class PreferencesImpl @Inject constructor(
 
     override var shouldLimitFP by prefs.shouldLimitFP
     override var limitFP by prefs.limitFP
-
-    override var preventLotteryBoxReset by prefs.preventLotteryBoxReset
 
     override var receiveEmbersWhenGiftBoxFull by prefs.receiveEmbersWhenGiftBoxFull
 

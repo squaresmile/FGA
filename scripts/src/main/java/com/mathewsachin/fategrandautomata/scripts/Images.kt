@@ -28,6 +28,7 @@ enum class Images {
     Retry,
     Withdraw,
     LotteryBoxFinished,
+    LotteryLineupUpdated,
     PresentBoxFull,
     MasterExp,
     MasterLevelUp,
@@ -65,5 +66,4 @@ enum class Images {
     CEMercyLv1,
     CEProsperityLv1,
     CESynchronizationLv1,
-    GudaFinalReward,
 }

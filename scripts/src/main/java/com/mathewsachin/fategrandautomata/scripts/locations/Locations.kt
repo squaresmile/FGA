@@ -54,12 +54,22 @@ class Locations @Inject constructor(
     val withdrawAcceptClick = Location(485, 720).xFromCenter()
     val withdrawCloseClick = Location(-10, 1140).xFromCenter()
 
-    fun locate(refillResource: RefillResourceEnum) = when (refillResource) {
-        RefillResourceEnum.Bronze -> 1140
-        RefillResourceEnum.Silver -> 922
-        RefillResourceEnum.Gold -> 634
-        RefillResourceEnum.SQ -> 345
-    }.let { y -> Location(-530, y).xFromCenter() }
+    fun locate(refillResource: RefillResourceEnum): List<Location> {
+        //scroll bar click location
+        val scrollBarLoc = when (refillResource) {
+            RefillResourceEnum.Copper -> 1040
+            else -> 300
+        }.let { y -> Location(750, y).xFromCenter() }
+
+        val resourceLoc = when (refillResource) {
+            RefillResourceEnum.Copper -> 980
+            RefillResourceEnum.Bronze -> 1140
+            RefillResourceEnum.Silver -> 922
+            RefillResourceEnum.Gold -> 634
+            RefillResourceEnum.SQ -> 345
+        }.let { y -> Location(-530, y).xFromCenter() }
+        return listOf(scrollBarLoc, resourceLoc)
+    }
 
     fun locate(boost: BoostItem.Enabled) = when (boost) {
         BoostItem.Enabled.Skip -> Location(1652, 1304)
@@ -81,7 +91,7 @@ class Locations @Inject constructor(
 
     val resultFriendRequestRegion = Region(600, 150, 100, 94).xFromCenter()
     val resultFriendRequestRejectClick = Location(-680, 1200).xFromCenter()
-    val resultMatRewardsRegion = Region(800, if (isNewUI) 1220 else 1290, 280, 130).xFromCenter()
+    val resultMatRewardsRegion = Region(800, 1220, 280, 130).xFromCenter()
     val resultClick = Location(320, 1350).xFromCenter()
     val resultQuestRewardRegion = Region(350, 140, 370, 250).xFromCenter()
     val resultDropScrollbarRegion = Region(980, 167, 100, 88).xFromCenter()
@@ -102,5 +112,5 @@ class Locations @Inject constructor(
     val ceEnhanceClick = Location(200, 600)
     val levelOneCERegion = Region(160, 380, 1840, 900)
 
-    val gudaFinalRegion = Region(-120, 1030, 240, 90).xFromCenter()
+    val npStartedRegion = Region(-400, 500, 800, 400).xFromCenter()
 }

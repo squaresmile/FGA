@@ -3,11 +3,12 @@ package com.mathewsachin.fategrandautomata.ui.more
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.Card
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults.cardElevation
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -24,6 +25,7 @@ import com.mathewsachin.fategrandautomata.ui.prefs.ListPreference
 import com.mathewsachin.fategrandautomata.ui.prefs.Preference
 import com.mathewsachin.fategrandautomata.ui.prefs.SwitchPreference
 import com.mathewsachin.fategrandautomata.ui.prefs.remember
+import com.mathewsachin.fategrandautomata.util.stringRes
 
 fun LazyListScope.advancedGroup(
     prefs: PrefsCore,
@@ -53,14 +55,20 @@ fun LazyListScope.advancedGroup(
         )
     }
 
+
     item {
         val rootForScreenshots by prefs.useRootForScreenshots.remember()
 
+        val enabled = !rootForScreenshots &&
+                android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU
+        if (!enabled) {
+            prefs.recordScreen.resetToDefault()
+        }
         prefs.recordScreen.SwitchPreference(
             title = stringResource(R.string.p_record_screen),
             summary = stringResource(R.string.p_record_screen_summary),
             icon = icon(R.drawable.ic_video),
-            enabled = !rootForScreenshots
+            enabled = enabled
         )
     }
 
@@ -78,25 +86,26 @@ fun LazyListScope.advancedGroup(
     item {
         Column {
             prefs.gameAreaMode.ListPreference(
-                title = "Game Area Mode",
+                title = stringResource(R.string.p_game_area_mode),
                 icon = icon(Icons.Default.Fullscreen),
-                entries = GameAreaMode.values().associateWith { it.name }
+                entries = GameAreaMode.values()
+                    .associateWith { stringResource(it.stringRes) }
             )
 
             val gameAreaMode by prefs.gameAreaMode.remember()
 
-            AnimatedVisibility (gameAreaMode == GameAreaMode.Custom) {
+            AnimatedVisibility(gameAreaMode == GameAreaMode.Custom) {
                 Card(
                     modifier = Modifier.padding(5.dp),
-                    elevation = 5.dp
+                    elevation = cardElevation(5.dp)
                 ) {
                     Column(
                         modifier = Modifier.scale(0.9f)
                     ) {
-                        prefs.gameOffsetLeft.customOffset("Left")
-                        prefs.gameOffsetRight.customOffset("Right")
-                        prefs.gameOffsetTop.customOffset("Top")
-                        prefs.gameOffsetBottom.customOffset("Bottom")
+                        prefs.gameOffsetLeft.customOffset(stringResource(R.string.p_game_area_custom_left))
+                        prefs.gameOffsetRight.customOffset(stringResource(R.string.p_game_area_custom_right))
+                        prefs.gameOffsetTop.customOffset(stringResource(R.string.p_game_area_custom_top))
+                        prefs.gameOffsetBottom.customOffset(stringResource(R.string.p_game_area_custom_bottom))
                     }
                 }
             }
@@ -105,7 +114,7 @@ fun LazyListScope.advancedGroup(
 
     item {
         prefs.stageCounterNew.SwitchPreference(
-            title = "Thresholded stage counter detection",
+            title = stringResource(R.string.p_thresholded_stage_counter),
             icon = icon(R.drawable.ic_counter)
         )
     }
@@ -160,7 +169,7 @@ private fun RootForScreenshots(
     Column {
         Preference(
             title = stringResource(R.string.p_root_screenshot),
-            summary = if (error) "Failed to get root access" else stringResource(R.string.p_root_screenshot_summary),
+            summary = stringResource(if (error) R.string.root_failed else R.string.p_root_screenshot_summary),
             icon = icon(R.drawable.ic_key),
             enabled = enabled,
             onClick = { action(!state) },

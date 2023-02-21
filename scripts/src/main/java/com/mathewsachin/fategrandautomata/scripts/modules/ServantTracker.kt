@@ -67,10 +67,12 @@ class ServantTracker @Inject constructor(
             )
         )
 
-        val isSupport = images[Images.ServantCheckSupport] in locations.battle.servantChangeSupportCheckRegion(slot)
+        var isSupport = false
+        // use same screenshot for support + face detection
+        useSameSnapIn {
+            isSupport = images[Images.ServantCheckSupport] in locations.battle.servantChangeSupportCheckRegion(slot)
 
-        if (teamSlot !in checkImages || isSupport) {
-            useSameSnapIn {
+            if (teamSlot !in checkImages || isSupport) {
                 checkImages[teamSlot] = TeamSlotData(
                     checkImage = locations.battle.servantChangeCheckRegion(slot)
                         .getPattern()
@@ -114,7 +116,9 @@ class ServantTracker @Inject constructor(
 
     private fun check(slot: FieldSlot) {
         // If a servant is not present, that means none are left in the backline
-        if (images[Images.ServantExist] !in locations.battle.servantPresentRegion(slot)) {
+        if (!locations.battle.servantPresentRegion(slot)
+                .exists(images[Images.ServantExist], similarity = 0.70)
+        ) {
             _deployed.remove(slot)
             servantQueue.clear()
             return

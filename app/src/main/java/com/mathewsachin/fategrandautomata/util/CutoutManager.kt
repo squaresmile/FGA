@@ -7,7 +7,6 @@ import com.mathewsachin.fategrandautomata.prefs.core.GameAreaMode
 import com.mathewsachin.fategrandautomata.prefs.core.PrefsCore
 import com.mathewsachin.fategrandautomata.scripts.enums.GameServerEnum
 import com.mathewsachin.fategrandautomata.scripts.prefs.IPreferences
-import com.mathewsachin.fategrandautomata.scripts.prefs.isNewUI
 import com.mathewsachin.libautomata.Region
 import com.mathewsachin.libautomata.Size
 import timber.log.Timber
@@ -73,10 +72,10 @@ class CutoutManager @Inject constructor(
     }
 
     private fun shouldIgnoreNotch() =
-        when {
-            // CN may or may not cover notch area
-            prefs.isNewUI && prefs.gameServer != GameServerEnum.Cn -> true
-            else -> prefs.ignoreNotchCalculation
+        when (prefs.gameServer) {
+            // TW may or may not cover notch area
+            GameServerEnum.Tw -> prefs.ignoreNotchCalculation
+            else -> true
         }
 
     private fun getCutout(rotation: Int): Cutout {
@@ -128,7 +127,9 @@ class CutoutManager @Inject constructor(
                 val r = prefsCore.gameOffsetRight.get()
                 val b = prefsCore.gameOffsetBottom.get()
 
-                Region(l, t, w - l - r, h - t - b)
+                // if the camera is on the right, use the right offset as x
+                val x = if (display.rotation == Surface.ROTATION_270) r else l
+                Region(x, t, w - l - r, h - t - b)
             }
         }
     }
