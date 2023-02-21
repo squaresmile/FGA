@@ -41,13 +41,13 @@ fun SkillMakerKukulcan(
         ) {
             TargetButton(
                 onClick = onOption1,
-                color = R.color.colorPrimaryDark,
+                color = colorResource(R.color.colorPrimaryDark),
                 text = stringResource(R.string.skill_maker_option_1)
             )
 
             TargetButton(
                 onClick = onOption2,
-                color = R.color.colorPrimaryDark,
+                color = colorResource(R.color.colorPrimaryDark),
                 text = stringResource(R.string.skill_maker_option_2)
             )
         }
