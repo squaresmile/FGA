@@ -19,7 +19,8 @@ fun SkillMakerTarget(
     showEmiya: Boolean,
     onEmiya: () -> Unit,
     showSpaceIshtar: Boolean,
-    onSpaceIshtar: () -> Unit
+    onSpaceIshtar: () -> Unit,
+    onKukulcan: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -64,6 +65,10 @@ fun SkillMakerTarget(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            Button(onClick = onKukulcan) {
+                Text(stringResource(R.string.skill_maker_kukulcan))
+            }
+
             when {
                 showEmiya -> {
                     Button(onClick = onEmiya) {

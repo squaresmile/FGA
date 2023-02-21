@@ -141,12 +141,21 @@ fun SkillMakerUI(
                     ),
                     onSpaceIshtar = {
                         navigate(SkillMakerNav.SpaceIshtar(nav.skill))
+                    },
+                    onKukulcan = {
+                        navigate(SkillMakerNav.Kukulcan(nav.skill))
                     }
                 )
             }
             is SkillMakerNav.SpaceIshtar -> {
                 SkillMakerSpaceIshtar(
                     onSkillTarget = { vm.targetSkill(it) }
+                )
+            }
+            is SkillMakerNav.Kukulcan -> {
+                SkillMakerKukulcan(
+                    onOption1 = { vm.targetSkill(ServantTarget.Option1) },
+                    onOption2 = { vm.targetSkill(ServantTarget.Option2) }
                 )
             }
         }

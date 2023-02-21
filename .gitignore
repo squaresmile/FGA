@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 /.idea/jarRepositories.xml
 /.idea/misc.xml
+bin/
+.vscode/settings.json
 .DS_Store
 /build
 /captures

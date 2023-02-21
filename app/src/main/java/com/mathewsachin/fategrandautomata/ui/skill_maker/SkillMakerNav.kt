@@ -10,4 +10,5 @@ sealed class SkillMakerNav {
     data class SkillTarget(val skill: Skill): SkillMakerNav()
     data class Emiya(val skill: Skill): SkillMakerNav()
     data class SpaceIshtar(val skill: Skill): SkillMakerNav()
+    data class Kukulcan(val skill: Skill): SkillMakerNav()
 }
