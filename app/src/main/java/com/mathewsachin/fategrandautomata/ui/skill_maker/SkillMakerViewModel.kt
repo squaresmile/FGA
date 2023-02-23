@@ -172,13 +172,7 @@ class SkillMakerViewModel @Inject constructor(
     fun targetSkill(targets: List<ServantTarget>?) {
         val skill = Skill.Servant.list.first { it.autoSkillCode == currentSkill }
 
-        add(
-            SkillMakerEntry.Action(
-                when (skill) {
-                    is Skill.Servant -> AutoSkillAction.ServantSkill(skill, targets)
-                }
-            )
-        )
+        add(SkillMakerEntry.Action(AutoSkillAction.ServantSkill(skill, targets)))
 
         back()
     }

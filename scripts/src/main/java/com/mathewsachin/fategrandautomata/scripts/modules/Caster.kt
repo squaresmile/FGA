@@ -67,6 +67,10 @@ class Caster @Inject constructor(
         castSkill(skill, targets)
     }
 
+    fun castServantSkill(skill: Skill.Servant, target: ServantTarget?) {
+        castSkill(skill, if (target == null) null else listOf(target))
+    }
+
     fun selectSkillTarget(target: ServantTarget) {
         val actualTarget = when (target) {
             ServantTarget.Left, ServantTarget.Right -> target
