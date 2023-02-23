@@ -14,7 +14,7 @@ sealed class SkillMakerEntry {
         private fun toString(skill: Skill, targets: List<ServantTarget>?): String {
             if (targets == null) return "${skill.autoSkillCode}"
             if (targets.size == 1) return toString(skill, targets[0])
-            return "${skill.autoSkillCode}(${targets.map { t -> t.autoSkillCode }.joinToString()})"
+            return "${skill.autoSkillCode}(${targets.map { t -> t.autoSkillCode }.joinToString("")})"
         }
 
         override fun toString() = when (action) {
