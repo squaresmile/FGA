@@ -73,8 +73,7 @@ fun SkillMakerUI(
     BackHandler {
         if (vm.navigation.value is SkillMakerNav.Main) {
             exitConfirmDialog.show()
-        }
-        else vm.navigation.value = SkillMakerNav.Main
+        } else vm.navigation.value = SkillMakerNav.Main
     }
 
     val (current, navigate) = vm.navigation
@@ -155,8 +154,17 @@ fun SkillMakerUI(
             is SkillMakerNav.Kukulcan -> {
                 SkillMakerKukulcan(
                     onOption1 = { vm.targetSkill(ServantTarget.Option1) },
-                    onOption2 = { vm.targetSkill(ServantTarget.Option2) }
+                    onOption2 = { vm.targetSkill(ServantTarget.Option2) },
+                    goToTarget = nav.skill in listOf(
+                        Skill.Servant.A2,
+                        Skill.Servant.B2,
+                        Skill.Servant.C2
+                    ),
+                    onTarget = { firstTarget -> navigate(SkillMakerNav.KukulcanTarget(nav.skill, firstTarget)) }
                 )
+            }
+            is SkillMakerNav.KukulcanTarget -> {
+                SkillMakerKukulcanTarget(onSkillTarget = { vm.targetSkill(listOf(nav.firstTarget, it)) })
             }
         }
     }

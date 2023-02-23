@@ -14,11 +14,8 @@ import com.mathewsachin.fategrandautomata.R
 import com.mathewsachin.fategrandautomata.scripts.models.ServantTarget
 
 @Composable
-fun SkillMakerKukulcan(
-    onOption1: () -> Unit,
-    onOption2: () -> Unit,
-    goToTarget: Boolean,
-    onTarget: (firstTarget: ServantTarget) -> Unit
+fun SkillMakerKukulcanTarget(
+    onSkillTarget: (ServantTarget) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -40,19 +37,21 @@ fun SkillMakerKukulcan(
                 .fillMaxWidth()
         ) {
             TargetButton(
-                onClick = if (goToTarget) (
-                        { onTarget(ServantTarget.Option1) }
-                        ) else onOption1,
-                color = colorResource(R.color.colorPrimaryDark),
-                text = stringResource(R.string.skill_maker_option_1)
+                onClick = { onSkillTarget(ServantTarget.A) },
+                color = colorResource(R.color.colorServant1),
+                text = stringResource(R.string.skill_maker_target_servant, 1)
             )
 
             TargetButton(
-                onClick = if (goToTarget) (
-                        { onTarget(ServantTarget.Option2) }
-                        ) else onOption2,
-                color = colorResource(R.color.colorPrimaryDark),
-                text = stringResource(R.string.skill_maker_option_2)
+                onClick = { onSkillTarget(ServantTarget.B) },
+                color = colorResource(R.color.colorServant2),
+                text = stringResource(R.string.skill_maker_target_servant, 2)
+            )
+
+            TargetButton(
+                onClick = { onSkillTarget(ServantTarget.C) },
+                color = colorResource(R.color.colorServant3),
+                text = stringResource(R.string.skill_maker_target_servant, 3)
             )
         }
     }
@@ -60,6 +59,6 @@ fun SkillMakerKukulcan(
 
 @Preview(widthDp = 600, heightDp = 300)
 @Composable
-fun TestKukulcan() {
-    SkillMakerKukulcan(onOption1 = { }, onOption2 = { }, goToTarget = true, onTarget = { })
+fun TestKukulcanTarget() {
+    SkillMakerKukulcanTarget(onSkillTarget = { })
 }

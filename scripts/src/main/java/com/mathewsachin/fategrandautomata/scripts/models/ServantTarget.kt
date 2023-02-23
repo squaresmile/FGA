@@ -10,8 +10,8 @@ sealed class ServantTarget(val autoSkillCode: Char) {
     object Right : ServantTarget('8')
 
     // Kukulcan
-    object Option1 : ServantTarget('9')
-    object Option2 : ServantTarget('A')
+    object Option1 : ServantTarget('K')
+    object Option2 : ServantTarget('U')
 
     companion object {
         val list by lazy { listOf(A, B, C, Left, Right, Option1, Option2) }
